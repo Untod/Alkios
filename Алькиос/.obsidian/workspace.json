@@ -1,0 +1,210 @@
+{
+  "main": {
+    "id": "c622e6c1e07306b0",
+    "type": "split",
+    "children": [
+      {
+        "id": "a3c7d75742293bbc",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e634b7255c268b91",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Страны/Республика Ореас.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Республика Ореас"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "24fffec30867749c",
+    "type": "split",
+    "children": [
+      {
+        "id": "a8af399e744f1b47",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "3756bc91470f7a89",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "28fcca67c7db5245",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "9e100a4a615aefea",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "3f4d1dd21b7811d8",
+    "type": "split",
+    "children": [
+      {
+        "id": "89985f02766c2ab8",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "75ef40a4547accd3",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Расы.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for Расы"
+            }
+          },
+          {
+            "id": "44d4d24fdea8b86e",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Расы.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from Расы"
+            }
+          },
+          {
+            "id": "3b189e902c320167",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "c5134a3deb6e02ec",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Расы.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of Расы"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "command-palette:Open command palette": false,
+      "github-sync:Sync with Remote": false
+    }
+  },
+  "active": "e634b7255c268b91",
+  "lastOpenFiles": [
+    "Расы.md",
+    "Предыстории.md",
+    "Оглавление.md",
+    "Страны.md",
+    "Предыс",
+    "Расовые особенности/Вторичные бонусы/Хладнокровие зауров.md",
+    "Расовые особенности/Основные бонусы/Ползучий 1.md",
+    "Расовые особенности/Основные бонусы/Щупальца.md",
+    "Расовые особенности/Основные бонусы/Ползучий 2.md",
+    "Расовые особенности/Штрафы/Амфибия.md",
+    "Расовые особенности/Вторичные бонусы/Акустический Удар.md",
+    "Расовые особенности/Вторичные бонусы/Природное Оружие (Удар хвостом).md",
+    "Расовые особенности/Вторичные бонусы/Усиленные Чувства.md",
+    "Расовые особенности/Вторичные бонусы/Привлекательность.md",
+    "Расовые особенности/Штрафы/Птичьи мозги.md",
+    "Расовые особенности/Вторичные бонусы/Жестокий Натиск.md",
+    "Расовые особенности/Вторичные бонусы/Манёвренные Крылья.md",
+    "Расовые особенности/Вторичные бонусы/Природное Оружие (Когти) 2.md",
+    "Расовые особенности/Вторичные бонусы/Мощные Крылья.md",
+    "Расовые особенности/Вторичные бонусы/Природное Оружие (Когти) 1.md",
+    "Расовые особенности/Вторичные бонусы/Могучие Крылья.md",
+    "Расовые особенности/Основные бонусы/Крылья Ястр.md",
+    "Расовые особенности/Основные бонусы/Крылья Ласт.md",
+    "Расовые особенности/Основные бонусы/Крылья Атрос.md",
+    "Расовые особенности/Основные бонусы/Подвиды рахни.md",
+    "Расовые бонусы/Штрафы/Хладнокровные.md",
+    "Расовые особенности/Штрафы/Тяжёлое лечение экзоскелета.md",
+    "Фауна",
+    "Легенды",
+    "Корпорации",
+    "Города",
+    "Страны",
+    "Расовые особенности/Штрафы",
+    "Таланты",
+    "Расовые особенности/Вторичные бонусы",
+    "Расовые особенности/Основные бонусы"
+  ]
+}
