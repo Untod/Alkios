@@ -1,6 +1,6 @@
 {
-  "remoteURL": "https://github.com/Untod/Alkios.git",
+  "remoteURL": "git@github.com:Untod/Alkios.git",
   "gitLocation": "",
   "syncinterval": 0,
-  "isSyncOnLoad": false
+  "isSyncOnLoad": true
 }

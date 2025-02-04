@@ -14928,13 +14928,16 @@ var cssAttachmentWhitelist = {
   svg: ["image/svg+xml"]
 };
 var Note = class {
-  constructor(plugin) {
+  constructor(plugin, leaf = null) {
     this.isEncrypted = true;
     this.isForceUpload = false;
     this.isForceClipboard = false;
     var _a;
     this.plugin = plugin;
-    this.leaf = (_a = this.plugin.app.workspace.getActiveFileView()) == null ? void 0 : _a.leaf;
+	if (leaf == null)
+		this.leaf = (_a = this.plugin.app.workspace.getActiveFileView()) == null ? void 0 : _a.leaf;
+	else
+		this.leaf = leaf;
     this.elements = [];
     this.template = new NoteTemplate();
   }
@@ -14946,7 +14949,7 @@ var Note = class {
   field(key) {
     return this.plugin.field(key);
   }
-  async share() {
+  async share(file = null) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n;
     if (!this.plugin.settings.apiKey) {
       this.plugin.authRedirect("share").then();
@@ -14985,7 +14988,8 @@ var Note = class {
       this.leaf.setViewState(startMode);
     }, 200);
     this.status.setStatus("Processing note...");
-    const file = this.plugin.app.workspace.getActiveFile();
+	if (file == null)
+      file = this.plugin.app.workspace.getActiveFile();
     if (!(file instanceof import_obsidian4.TFile)) {
       this.status.hide();
       new StatusMessage("There is no active file to share");
@@ -15403,6 +15407,7 @@ var SharePlugin = class extends import_obsidian6.Plugin {
     // Expose some tools in the plugin object
     this.hash = shortHash;
     this.sha256 = sha256;
+	this.isSharingAll = false;
   }
   async onload() {
     await this.loadSettings();
@@ -15414,6 +15419,12 @@ var SharePlugin = class extends import_obsidian6.Plugin {
       this.settings.server = "https://api.note.sx";
       await this.saveSettings();
     }
+	
+	const shareAllIcon = this.addRibbonIcon("share", "Share all notes", (evt) => {
+      this.uploadAllNotes();
+    });
+	shareAllIcon.addClass("gh-sync-ribbon");
+	
     this.settingsPage = new ShareSettingsTab(this.app, this);
     this.addSettingTab(this.settingsPage);
     this.api = new API(this);
@@ -15433,10 +15444,30 @@ var SharePlugin = class extends import_obsidian6.Plugin {
         }
       }
     });
+	this.registerObsidianProtocolHandler("share-all-notes", async (data) => {
+      if (data.action === "share-all-notes" && data.key) {
+        this.settings.apiKey = data.key;
+        await this.saveSettings();
+        if (this.settingsPage.apikeyEl) {
+          this.settingsPage.apikeyEl.setValue(data.key);
+        }
+        if (this.settings.authRedirect === "share") {
+          this.authRedirect(null).then();
+          this.uploadAllNotes().then();
+        } else {
+          new StatusMessage("Plugin successfully connected. You can now start sharing notes!", 3 /* Success */, 6e3);
+        }
+      }
+    });
     this.addCommand({
       id: "share-note",
       name: "Share current note",
       callback: () => this.uploadNote()
+    });
+	this.addCommand({
+      id: "share-all-notes",
+      name: "Share all notes",
+      callback: () => this.uploadAllNotes()
     });
     this.addCommand({
       id: "force-upload",
@@ -15530,6 +15561,66 @@ var SharePlugin = class extends import_obsidian6.Plugin {
       this.addShareIcons();
     }
   }
+
+async uploadAllNotes() {
+	if (this.isSharingAll) {
+		this.isSharingAll = false;
+		return;
+	}
+	this.isSharingAll = true;
+	var _a, _b;
+	var forceUpload = false;
+	try {
+		const files = this.app.vault.getMarkdownFiles();
+		var prevLeaf;
+		var i = 0;
+		for (const file of files) {
+			if (file instanceof import_obsidian6.TFile) {
+				if (!this.isSharingAll) {
+					new StatusMessage("Uploading stopped", 1);
+					return;
+				}
+				const leaf = this.app.workspace.getLeaf(true);
+				await leaf.openFile(file)
+				if (prevLeaf != null)
+					prevLeaf.detach();
+				const meta = this.app.metadataCache.getFileCache(file);
+				const note = new Note(this/*, leaf*/);
+				note.shareAsPlainText(false);
+				// if (this.settings.shareUnencrypted) {
+					// note.shareAsPlainText(true);
+				// }
+				// if (((_a = meta == null ? void 0 : meta.frontmatter) == null ? void 0 : _a[note.field(3 /* unencrypted */)]) === true) {
+					// note.shareAsPlainText(true);
+				// }
+				// if (((_b = meta == null ? void 0 : meta.frontmatter) == null ? void 0 : _b[note.field(2 /* encrypted */)]) === true) {
+					// note.shareAsPlainText(false);
+				// }
+				if (forceUpload) {
+					note.forceUpload();
+				}
+				try {
+					await note.share();
+				} catch (e2) {
+					if (e2.message !== "Known error") {
+						console.log(e2);
+						new StatusMessage("There was an error uploading the note, please try again.", 2 /* Error */);
+					}
+				}
+				note.status.hide();
+				this.addShareIcons();
+				new StatusMessage((++i) + "/" + files.length + " uploaded", 1);
+				prevLeaf = leaf;
+			}
+		}
+		if (prevLeaf != null)
+			prevLeaf.detach();
+	} catch (ex) {
+		console.log(ex);
+		new StatusMessage(ex, 2);
+	}
+}
+
   /**
    * Copy the share link to the clipboard. The note will be shared first if neccessary.
    * @param file
@@ -15573,6 +15664,49 @@ var SharePlugin = class extends import_obsidian6.Plugin {
         return;
       }
       const activeFile = this.app.workspace.getActiveFile();
+      if (!activeFile)
+        return;
+      const shareLink = (_b = (_a = this.app.metadataCache.getFileCache(activeFile)) == null ? void 0 : _a.frontmatter) == null ? void 0 : _b[this.field(0 /* link */)];
+      if (!shareLink)
+        return;
+      document.querySelectorAll(`div.metadata-property[data-property-key="${this.field(0 /* link */)}"]`).forEach((propertyEl) => {
+        const valueEl = propertyEl.querySelector("div.metadata-property-value");
+        const linkEl = valueEl == null ? void 0 : valueEl.querySelector("div.external-link");
+        if ((linkEl == null ? void 0 : linkEl.innerText) !== shareLink)
+          return;
+        if (valueEl && !valueEl.querySelector("div.share-note-icons")) {
+          const iconsEl = document.createElement("div");
+          iconsEl.classList.add("share-note-icons");
+          const shareIcon = iconsEl.createEl("span");
+          shareIcon.title = "Re-share note";
+          (0, import_obsidian6.setIcon)(shareIcon, "upload-cloud");
+          shareIcon.onclick = () => this.uploadNote();
+          const copyIcon = iconsEl.createEl("span");
+          copyIcon.title = "Copy link to clipboard";
+          (0, import_obsidian6.setIcon)(copyIcon, "copy");
+          copyIcon.onclick = async () => {
+            await navigator.clipboard.writeText(shareLink);
+            new StatusMessage("\u{1F4CB} Shared link copied to clipboard");
+          };
+          const deleteIcon = iconsEl.createEl("span");
+          deleteIcon.title = "Delete shared note";
+          (0, import_obsidian6.setIcon)(deleteIcon, "trash-2");
+          deleteIcon.onclick = () => this.deleteSharedNote(activeFile);
+          valueEl.prepend(iconsEl);
+        }
+      });
+    }, 50);
+  }
+  
+  addShareIcons2(activeFile) {
+    let count = 0;
+    const timer = setInterval(() => {
+      var _a, _b;
+      count++;
+      if (count > 8) {
+        clearInterval(timer);
+        return;
+      }
       if (!activeFile)
         return;
       const shareLink = (_b = (_a = this.app.metadataCache.getFileCache(activeFile)) == null ? void 0 : _a.frontmatter) == null ? void 0 : _b[this.field(0 /* link */)];

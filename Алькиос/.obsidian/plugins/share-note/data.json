@@ -7,10 +7,10 @@
   "theme": "",
   "themeMode": 0,
   "titleSource": 0,
-  "removeYaml": false,
+  "removeYaml": true,
   "removeBacklinksFooter": false,
   "expiry": "",
-  "clipboard": true,
+  "clipboard": false,
   "shareUnencrypted": false,
   "authRedirect": null,
   "debug": 0
